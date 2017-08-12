@@ -7,7 +7,8 @@
     "node": "6.2.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "deploy": "git push & git push heroku master"
   },
   "keywords": [],
   "author": "",
