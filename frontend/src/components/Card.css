@@ -1,0 +1,34 @@
+.card {
+    border: 1px solid black;
+    width: 150px;
+    height: 200px;
+}
+
+img {
+    max-width: 100%;
+}
+
+.hearts,
+.diamonds {
+    color: red;
+}
+.hearts:after {
+    content:"♥";
+}
+
+.diamonds:after {
+    content: "♦";
+}
+
+.spades,
+.clubs {
+    color: black;
+}
+
+.spades:after {
+    content: "♠";
+}
+
+.clubs:after {
+    content: "♣";
+}
