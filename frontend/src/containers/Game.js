@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import Board from './Board';
+// import Board from './Board';
+import Stack from './Stack';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 class Game extends Component {
     constructor(props) {
@@ -48,7 +51,7 @@ class Game extends Component {
             { value: 2, suit: 'spades', display: '2' },
             { value: 3, suit: 'spades', display: '3' },
             { value: 4, suit: 'spades', display: '4' },
-            { value: 5, suit: 'hearts', display: '5' },
+            { value: 5, suit: 'spades', display: '5' },
             { value: 6, suit: 'spades', display: '6' },
             { value: 7, suit: 'spades', display: '7' },
             { value: 8, suit: 'spades', display: '8' },
@@ -59,15 +62,35 @@ class Game extends Component {
             { value: 13, suit: 'spades', display: 'K' }
         ];
     }
-
     componentDidMount() {
-        console.log(this.deck);
+        this.deck = this.shuffle(this.deck);
     }
+    shuffle(array) {
+        let currentIndex = array.length, temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    }
+
     render() {
-        return (
-            <Board id="p1"></Board>
+        return (<div>
+            <Stack cards={this.deck}></Stack>
+            <Stack cards={[]}></Stack></div>
+            // <Board id="p1" deck={this.deck}></Board>
         );
     }
 }
 
-export default Game;
+export default DragDropContext(HTML5Backend)(Game);
