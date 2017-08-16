@@ -1,38 +1,44 @@
-import React from 'react';
-import cardback from '../images/cardback.jpg';
-import './Card.css';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { ItemTypes } from '../constants/Types';
+import { DragSource } from 'react-dnd';
 
-class Card extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: this.props.value,
-            suit: this.props.suit,
-            display: this.props.display,
-            faceUp: this.props.faceUp
-        }
-        this.show = this.show.bind(this);
-    }
-    show() {
-        this.setState({faceUp: true});
-    }
-    drag(e) {
-        console.log(e.target);
-        e.dataTransfer.setData("text", e.target.id);
-    }
-    render() {
-        let contents = null;
-        if (this.state.faceUp) {
-            contents = <h1 className={this.state.suit} data-value={this.state.value}>{this.state.display}</h1>
-        } else {
-            contents = <img src={cardback} alt="face down"/>
-        }
-        return (
-            <div className="card" draggable="true" onDragStart={this.drag} onClick={this.show}>
-              {contents}
-            </div>
-        );
-    }
+const cardSource = {
+  beginDrag(props) {
+    return {id: props.id};
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  }
 }
 
-export default Card;
+
+class Card extends Component {
+  render() {
+        const { connectDragSource, isDragging } = this.props;
+        return connectDragSource(
+            <div style={{
+                opacity: isDragging ? 0.5 : 1,
+                width: '150px',
+                height: '200px',
+                cursor: 'move',
+                border: '1px solid black'
+            }}>Ace of Spades</div>
+        );
+  }
+}
+
+Card.propTypes = {
+    id: PropTypes.string.isRequired,
+    suit: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
+    display: PropTypes.string.isRequired,
+    connectDragSource: PropTypes.func.isRequired,
+    isDragging: PropTypes.bool.isRequired
+};
+
+export default DragSource(ItemTypes.CARD, cardSource, collect)(Card);
