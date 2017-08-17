@@ -1,8 +1,12 @@
-let knightPosition = [1, 7];
+let aceStacks = [
+  {suit: 'spade', value: 1}, 
+  {suit: '', value: 0},
+  {suit: '', value: 0},
+  {suit: '', value: 0}];
 let observer = null;
 
 function emitChange() {
-  observer(knightPosition);
+  observer(aceStacks);
 }
 
 export function observe(o) {
@@ -14,16 +18,17 @@ export function observe(o) {
   emitChange();
 }
 
-export function canMoveKnight(toX, toY) {
-  const [x, y] = knightPosition;
-  const dx = toX - x;
-  const dy = toY - y;
+export function canMoveCard(card, suit, value) {
+  const stackSuit = suit ? suit : card.suit;
 
-  return (Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
-         (Math.abs(dx) === 1 && Math.abs(dy) === 2);
+  return (card.suit === stackSuit && card.value === value + 1);
 }
 
-export function moveKnight(toX, toY) {
-  knightPosition = [toX, toY];
+export function moveCard(card, prevStack, newStack) {
+  // console.log("id" + id);
+  // console.log("suit" + suit);
+  // console.log(aceStacks);
+  // aceStacks[id] = {suit: suit, value: value};
+  // console.log(aceStacks);
   emitChange();
 }

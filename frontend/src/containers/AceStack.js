@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Square from '../components/Square';
-import { canMoveKnight, moveKnight } from '../api/Game';
+import Stack from '../components/Stack';
+import { canMoveCard, moveCard } from '../api/Game';
 import { ItemTypes } from '../constants/Types';
 import { DropTarget } from 'react-dnd';
 
-const squareTarget = {
+const stackTarget = {
   drop(props, monitor) {
-    moveKnight(props.x, props.y);
+    let card = monitor.getItem();
+    moveCard(card, props.suit, props.value, props.id);
   },
-  canDrop(props) {
-    return canMoveKnight(props.x, props.y);
+  canDrop(props, monitor) {
+    let card = monitor.getItem();
+    return canMoveCard(card, props.suit, props.value);
   }
 };
 
@@ -22,7 +24,7 @@ function collect(connect, monitor) {
   };
 }
 
-class BoardSquare extends Component {
+class AceStack extends Component {
     renderOverlay(color) {
         return (
         <div style={{
@@ -39,8 +41,7 @@ class BoardSquare extends Component {
     }
   
     render() {
-        const { x, y, connectDropTarget, isOver, canDrop } = this.props;
-        const black = (x + y) % 2 === 1;
+        const { id, suit, value, connectDropTarget, isOver, canDrop } = this.props;
 
         return connectDropTarget(
             <div style={{
@@ -48,9 +49,9 @@ class BoardSquare extends Component {
                 width: '100%',
                 height: '100%'
             }}>
-                <Square black={black}>
+                <Stack>
                 {this.props.children}
-                </Square>
+                </Stack>
                 {isOver && !canDrop && this.renderOverlay('red')}
                 {!isOver && canDrop && this.renderOverlay('yellow')}
                 {isOver && canDrop && this.renderOverlay('green')}
@@ -59,11 +60,12 @@ class BoardSquare extends Component {
     }
 }
 
-BoardSquare.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
+AceStack.propTypes = {
   isOver: PropTypes.bool.isRequired,
-  canDrop: PropTypes.bool.isRequired
+  canDrop: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
+  suit: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired
 };
 
-export default DropTarget(ItemTypes.CARD, squareTarget, collect)(BoardSquare);
+export default DropTarget(ItemTypes.CARD, stackTarget, collect)(AceStack);

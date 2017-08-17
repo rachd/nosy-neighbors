@@ -5,7 +5,7 @@ import { DragSource } from 'react-dnd';
 
 const cardSource = {
   beginDrag(props) {
-    return {id: props.id};
+    return {id: props.id, suit: props.suit, value: props.value, display: props.display};
   }
 };
 
@@ -33,7 +33,7 @@ class Card extends Component {
 }
 
 Card.propTypes = {
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     suit: PropTypes.string.isRequired,
     value: PropTypes.number.isRequired,
     display: PropTypes.string.isRequired,

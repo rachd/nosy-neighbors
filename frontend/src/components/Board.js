@@ -1,49 +1,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BoardSquare from '../containers/BoardSquare';
+import AceStack from '../containers/AceStack';
 import Card from './Card';
-import { canMoveKnight, moveKnight } from '../api/Game';
+import { canMoveCard, moveCard } from '../api/Game';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 class Board extends Component {
     static propTypes = {
-        knightPosition: PropTypes.arrayOf(
-        PropTypes.number.isRequired
+        aceStacks: PropTypes.arrayOf(
+            PropTypes.object.isRequired
         ).isRequired
     };
 
-    renderSquare(i) {
-    const x = i % 8;
-    const y = Math.floor(i / 8);
-    return (
-        <div key={i}
-            style={{ width: '12.5%', height: '12.5%' }}>
-        <BoardSquare x={x}
-                    y={y}>
-            {this.renderCard(x, y)}
-        </BoardSquare>
-        </div>
-    );
+    renderAceStack(i, stack) {
+        return (
+            <div key={i}>
+            <AceStack id={i} suit={stack.suit} value={stack.value}>
+                {this.renderCard(stack.suit, stack.value)}
+            </AceStack>
+            </div>
+        );
     }
 
-    renderCard(x, y) {
-        const [knightX, knightY] = this.props.knightPosition;
-        if (x === knightX && y === knightY) {
-            return <Card />;
-        }
-    }
-
-    handleSquareClick(toX, toY) {
-        if (canMoveKnight(toX, toY)) {
-            moveKnight(toX, toY);
+    renderCard(suit, value) {
+        if (suit != '') {
+            return <Card id={1} value={value} suit={suit} display='Ace'/>;
         }
     }
 
     render() {
         const squares = [];
-        for (let i = 0; i < 64; i++) {
-        squares.push(this.renderSquare(i));
+        for (let i = 0; i < 4; i++) {
+        squares.push(this.renderAceStack(i, this.props.aceStacks[i]));
         }
 
         return (
