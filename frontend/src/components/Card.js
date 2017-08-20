@@ -19,7 +19,7 @@ function collect(connect, monitor) {
 
 class Card extends Component {
   render() {
-        const { connectDragSource, isDragging } = this.props;
+        const { connectDragSource, isDragging, id, suit, value, display } = this.props;
         return connectDragSource(
             <div style={{
                 opacity: isDragging ? 0.5 : 1,
@@ -27,7 +27,7 @@ class Card extends Component {
                 height: '200px',
                 cursor: 'move',
                 border: '1px solid black'
-            }}>Ace of Spades</div>
+            }}>{this.props.display} of {this.props.suit}</div>
         );
   }
 }

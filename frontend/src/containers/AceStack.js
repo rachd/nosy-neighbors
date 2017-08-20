@@ -53,7 +53,6 @@ class AceStack extends Component {
                 {this.props.children}
                 </Stack>
                 {isOver && !canDrop && this.renderOverlay('red')}
-                {!isOver && canDrop && this.renderOverlay('yellow')}
                 {isOver && canDrop && this.renderOverlay('green')}
             </div>
         );

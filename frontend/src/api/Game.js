@@ -1,12 +1,18 @@
 let aceStacks = [
-  {suit: 'spade', value: 1}, 
-  {suit: '', value: 0},
-  {suit: '', value: 0},
-  {suit: '', value: 0}];
+  {suit: '', value: 0, display: ''}, 
+  {suit: '', value: 0, display: ''},
+  {suit: '', value: 0, display: ''},
+  {suit: '', value: 0, display: ''}];
+let drawStack = [
+  {suit: 'spades', value: 1, display: 'ace'},
+  {suit: 'clubs', value: 1, display: 'ace'},
+  {suit: 'spades', value: 2, display: 'two'},
+  {suit: 'hearts', value: 3, display: 'three'}
+];
 let observer = null;
 
 function emitChange() {
-  observer(aceStacks);
+  observer(aceStacks, drawStack);
 }
 
 export function observe(o) {
@@ -20,15 +26,13 @@ export function observe(o) {
 
 export function canMoveCard(card, suit, value) {
   const stackSuit = suit ? suit : card.suit;
-
-  return (card.suit === stackSuit && card.value === value + 1);
+  return (card.suit === stackSuit && card.value == value + 1);
 }
 
-export function moveCard(card, prevStack, newStack) {
-  // console.log("id" + id);
-  // console.log("suit" + suit);
-  // console.log(aceStacks);
-  // aceStacks[id] = {suit: suit, value: value};
-  // console.log(aceStacks);
+export function moveCard(card, suit, value, id) {
+  aceStacks[id].suit = card.suit;
+  aceStacks[id].value = card.value;
+  aceStacks[id].display = card.display;
+  drawStack = drawStack.slice(1);
   emitChange();
 }
