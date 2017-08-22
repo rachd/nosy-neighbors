@@ -4,10 +4,12 @@ let aceStacks = [
   {suit: '', value: 0, display: ''},
   {suit: '', value: 0, display: ''}];
 let drawStack = [
-  {suit: 'spades', value: 1, display: 'ace'},
-  {suit: 'clubs', value: 1, display: 'ace'},
-  {suit: 'spades', value: 2, display: 'two'},
+  // {suit: 'spades', value: 1, display: 'ace'},
+  // {suit: 'clubs', value: 1, display: 'ace'},
+  // {suit: 'spades', value: 2, display: 'two'},
   {suit: 'hearts', value: 13, display: 'king'},
+  {suit: 'spades', value: 12, display: 'queen'},
+  {suit: 'diamonds', value: 13, display: 'king'}
 ];
 let playerStacks = [
   [{suit: '', value: 14, display: ''}], 
@@ -84,13 +86,13 @@ export function canMoveCardToPlayer(card, suit, value) {
     cardColor = 'black';
   }
   if (suit == '') {
-    stackColor = cardColor;
+    stackColor = '';
   } else if (suit == 'hearts' || suit == 'diamonds') {
     stackColor = 'red';
   } else {
     stackColor = 'black';
   }
-  return (cardColor === stackColor && card.value === value - 1);
+  return (cardColor != stackColor && card.value === value - 1);
 }
 
 export function moveCardToPlayer(card, id) {
