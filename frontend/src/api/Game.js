@@ -7,7 +7,7 @@ let drawStack = [
   {suit: 'spades', value: 1, display: 'ace'},
   {suit: 'clubs', value: 1, display: 'ace'},
   {suit: 'spades', value: 2, display: 'two'},
-  {suit: 'hearts', value: 13, display: 'king'}
+  {suit: 'hearts', value: 13, display: 'king'},
 ];
 let playerStacks = [
   [{suit: '', value: 14, display: ''}], 
@@ -30,6 +30,29 @@ export function observe(o) {
   emitChange();
 }
 
+function removeAce(id) {
+  if(aceStacks[id].value == 1) {
+    aceStacks[id].suit = '';
+    aceStacks[id].value = 0;
+    aceStacks[id].display = '';
+  } else {
+    aceStacks[id].value = aceStacks[id].value - 1;
+    aceStacks[id].display = aceStacks[id].value;
+  }
+}
+
+function removeCard(card) {
+  let id = card.parent;
+  if (id.includes('player')) {
+    id = id.slice(6);
+  } else if (id.includes('ace')) {
+    id = parseInt(id.slice(3));
+    removeAce(id);
+  } else {
+    drawStack = drawStack.slice(1);
+  }
+}
+
 export function canMoveCardToAce(card, suit, value) {
   const stackSuit = suit ? suit : card.suit;
   return (card.suit === stackSuit && card.value == value + 1);
@@ -39,7 +62,7 @@ export function moveCardToAce(card, suit, value, id) {
   aceStacks[id].suit = card.suit;
   aceStacks[id].value = card.value;
   aceStacks[id].display = card.display;
-  drawStack = drawStack.slice(1);
+  removeCard(card);
   emitChange();
 }
 
@@ -63,6 +86,6 @@ export function canMoveCardToPlayer(card, suit, value) {
 
 export function moveCardToPlayer(card, id) {
   playerStacks[id].push(card);
-  drawStack = drawStack.slice(1);
+  removeCard(card);
   emitChange();
 }

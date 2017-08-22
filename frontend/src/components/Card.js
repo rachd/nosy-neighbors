@@ -5,7 +5,8 @@ import { DragSource } from 'react-dnd';
 
 const cardSource = {
   beginDrag(props) {
-    return {id: props.id, suit: props.suit, value: props.value, display: props.display};
+    const parentId = document.getElementById(props.id).parentElement.id;
+    return {id: props.id, suit: props.suit, value: props.value, display: props.display, parent: parentId};
   }
 };
 
@@ -27,13 +28,13 @@ class Card extends Component {
                 height: '200px',
                 cursor: 'move',
                 border: '1px solid black'
-            }}>{this.props.display} of {this.props.suit}</div>
+            }} id={id}>{this.props.display} of {this.props.suit}</div>
         );
   }
 }
 
 Card.propTypes = {
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     suit: PropTypes.string.isRequired,
     value: PropTypes.number.isRequired,
     display: PropTypes.string.isRequired,

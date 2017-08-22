@@ -49,7 +49,7 @@ class AceStack extends Component {
                 width: '100%',
                 height: '100%'
             }}>
-                <Stack>
+                <Stack id={'ace'+id}>
                 {this.props.children}
                 </Stack>
                 {isOver && !canDrop && this.renderOverlay('red')}

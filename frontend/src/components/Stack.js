@@ -11,7 +11,7 @@ export default class Stack extends Component {
             width: '150px',
             height: '200px',
             margin: '10px'
-        }}>
+        }} id={this.props.id}>
             {this.props.children}
         </div>);
     }

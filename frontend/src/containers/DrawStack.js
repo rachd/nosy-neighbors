@@ -25,7 +25,7 @@ class DrawStack extends Component {
                 width: '100%',
                 height: '100%'
             }}>
-                <Stack>
+                <Stack id="draw">
                 {this.props.children}
                 </Stack>
             </div>

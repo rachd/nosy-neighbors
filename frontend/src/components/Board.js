@@ -60,7 +60,7 @@ class Board extends Component {
 
     renderCard(suit, value, display) {
         if (suit != '') {
-            return <Card id={1} value={value} suit={suit} display={display}/>;
+            return <Card id={suit+value} value={value} suit={suit} display={display}/>;
         }
     }
 
@@ -80,7 +80,7 @@ class Board extends Component {
                 width: '100%',
                 height: '100%',
                 display: 'flex',
-                flexWrap: 'wrap'
+                flexWrap: 'wrap',
             }}>
             {drawPile}
             {aceStacks}
