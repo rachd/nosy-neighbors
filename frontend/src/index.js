@@ -6,9 +6,9 @@ import { observe } from './api/Game';
 
 const rootEl = document.getElementById('root');
 
-observe((aceStacks, drawStack) =>
+observe((aceStacks, drawStack, playerStacks) =>
   ReactDOM.render(
-    <div className="App"><Board aceStacks={aceStacks} drawStack={drawStack}/></div>,
+    <div className="App"><Board aceStacks={aceStacks} drawStack={drawStack} playerStacks={playerStacks}/></div>,
     rootEl
   )
 );

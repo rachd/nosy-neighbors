@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Stack from '../components/Stack';
-import { canMoveCard, moveCard } from '../api/Game';
-import { ItemTypes } from '../constants/Types';
-import { DropTarget } from 'react-dnd';
 
 class DrawStack extends Component {
     renderOverlay(color) {
