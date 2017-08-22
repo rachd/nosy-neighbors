@@ -41,10 +41,19 @@ function removeAce(id) {
   }
 }
 
+function removePlayerCard(id, card) {
+  if(card.value == 13) {
+    playerStacks[id] = [{suit: '', value: 14, display: ''}];
+  } else {
+    console.log('move');
+  }
+}
+
 function removeCard(card) {
   let id = card.parent;
   if (id.includes('player')) {
     id = id.slice(6);
+    removePlayerCard(id, card);
   } else if (id.includes('ace')) {
     id = parseInt(id.slice(3));
     removeAce(id);
@@ -85,6 +94,9 @@ export function canMoveCardToPlayer(card, suit, value) {
 }
 
 export function moveCardToPlayer(card, id) {
+  if (playerStacks[id][0].value == 14) {
+    playerStacks[id].pop();
+  }
   playerStacks[id].push(card);
   removeCard(card);
   emitChange();
