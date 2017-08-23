@@ -20,11 +20,7 @@ class DrawStack extends Component {
   
     render() {
         return (
-            <div style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%'
-            }}>
+            <div className="drawStack">
                 <Stack id="draw">
                 {this.props.children}
                 </Stack>

@@ -25,35 +25,19 @@ function collect(connect, monitor) {
 }
 
 class PlayerStack extends Component {
-    renderOverlay(color) {
-        return (
-        <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            zIndex: 1,
-            opacity: 0.5,
-            backgroundColor: color,
-        }} />
-        );
-    }
-  
     render() {
         const { id, suit, value, connectDropTarget, isOver, canDrop } = this.props;
-
+        let backgroundColor = "transparent";
+        if(this.props.isOver && !this.props.canDrop) {
+            backgroundColor = "red";
+        } else if (this.props.isOver && this.props.canDrop) {
+            backgroundColor = "green";
+        }
         return connectDropTarget(
-            <div style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%'
-            }}>
+            <div style={{backgroundColor: backgroundColor}}>
                 <Stack id={'player' + id}>
                 {this.props.children}
                 </Stack>
-                {isOver && !canDrop && this.renderOverlay('red')}
-                {isOver && canDrop && this.renderOverlay('green')}
             </div>
         );
     }

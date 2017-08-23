@@ -25,11 +25,9 @@ class Board extends Component {
 
     renderAceStack(i, stack) {
         return (
-            <div key={i}>
-                <AceStack id={i} suit={stack.suit} value={stack.value}>
-                    {this.renderCard(stack.suit, stack.value, stack.display)}
-                </AceStack>
-            </div>
+            <AceStack key={i} id={i} suit={stack.suit} value={stack.value}>
+                {this.renderCard(stack.suit, stack.value, stack.display)}
+            </AceStack>
         );
     }
 
@@ -50,11 +48,9 @@ class Board extends Component {
     renderPlayerStack(i, stack) {
         const lastCard = stack[stack.length - 1];
         return (
-            <div key={i}>
-                <PlayerStack id={i} value={lastCard.value} suit={lastCard.suit}>
-                    {this.renderCard(lastCard.suit, lastCard.value, lastCard.display)}
-                </PlayerStack>
-            </div>
+            <PlayerStack key={i} id={i} value={lastCard.value} suit={lastCard.suit}>
+                {this.renderCard(lastCard.suit, lastCard.value, lastCard.display)}
+            </PlayerStack>
         )
     }
 
@@ -76,16 +72,25 @@ class Board extends Component {
         }
 
         return (
-            <div style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                flexWrap: 'wrap',
-            }}>
-            {drawPile}
-            {aceStacks}
-            {playerStacks}
-        </div>
+            <div>
+                <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                }}>
+                {drawPile}
+                {aceStacks}
+                </div>
+                <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                }}>
+                {playerStacks}
+                </div>
+            </div>
         );
     }
 }
