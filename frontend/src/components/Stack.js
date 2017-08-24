@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export default class Stack extends Component {
     render() {
-        const border = this.props.children ? '2px solid tan' : '2px dashed black';
+        const border = this.props.children ? '2px solid transparent' : '2px dashed black';
 
         return (
         <div style={{

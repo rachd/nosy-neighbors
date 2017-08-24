@@ -4,12 +4,13 @@ let aceStacks = [
   {suit: '', value: 0, display: ''},
   {suit: '', value: 0, display: ''}];
 let drawStack = [
-  // {suit: 'spades', value: 1, display: 'ace'},
-  // {suit: 'clubs', value: 1, display: 'ace'},
-  // {suit: 'spades', value: 2, display: 'two'},
+  {suit: 'spades', value: 1, display: 'ace'},
+  {suit: 'clubs', value: 1, display: 'ace'},
+  {suit: 'spades', value: 2, display: 'two'},
   {suit: 'hearts', value: 13, display: 'king'},
   {suit: 'spades', value: 12, display: 'queen'},
-  {suit: 'diamonds', value: 13, display: 'king'}
+  {suit: 'diamonds', value: 13, display: 'king'},
+  {suit: 'hearts', value: 11, display: 'jack'}
 ];
 let playerStacks = [
   [{suit: '', value: 14, display: ''}], 
@@ -47,7 +48,12 @@ function removePlayerCard(id, card) {
   if(card.value == 13) {
     playerStacks[id] = [{suit: '', value: 14, display: ''}];
   } else {
-    console.log('move');
+    for (let [index, pCard] of playerStacks[id].entries()) {
+      if (pCard.id === card.id) {
+        playerStacks[id] = playerStacks[id].slice(0, index);
+        return;
+      }
+    }
   }
 }
 
@@ -96,6 +102,7 @@ export function canMoveCardToPlayer(card, suit, value) {
 }
 
 export function moveCardToPlayer(card, id) {
+  console.log(card.parent);
   if (playerStacks[id][0].value == 14) {
     playerStacks[id].pop();
   }

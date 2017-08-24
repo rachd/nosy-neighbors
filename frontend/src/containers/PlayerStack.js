@@ -34,7 +34,7 @@ class PlayerStack extends Component {
             backgroundColor = "green";
         }
         return connectDropTarget(
-            <div style={{backgroundColor: backgroundColor}}>
+            <div style={{backgroundColor: backgroundColor}} className="playerStack">
                 <Stack id={'player' + id}>
                 {this.props.children}
                 </Stack>

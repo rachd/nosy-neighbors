@@ -47,16 +47,17 @@ class Board extends Component {
 
     renderPlayerStack(i, stack) {
         const lastCard = stack[stack.length - 1];
+        let cards = stack.map((card, index) => this.renderCard(card.suit, card.value, card.display, index));
         return (
             <PlayerStack key={i} id={i} value={lastCard.value} suit={lastCard.suit}>
-                {this.renderCard(lastCard.suit, lastCard.value, lastCard.display)}
+                {cards[0] ? cards : null}
             </PlayerStack>
         )
     }
 
-    renderCard(suit, value, display) {
+    renderCard(suit, value, display, key=0) {
         if (suit != '') {
-            return <Card id={suit+value} value={value} suit={suit} display={display}/>;
+            return <Card key={key} id={suit+value} value={value} suit={suit} display={display}/>;
         }
     }
 
