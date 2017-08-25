@@ -6,6 +6,7 @@ let aceStacks = [
   {suit: '', value: 0, display: '', faceUp: true},
   {suit: '', value: 0, display: '', faceUp: true}];
 let drawStack = DECK;
+let discardStack = [];
 let playerStacks = [
   [{suit: '', value: 14, display: '', faceUp: true}], 
   [{suit: '', value: 14, display: '', faceUp: true}], 
@@ -19,7 +20,7 @@ function setUpGame() {
 };
 
 function emitChange() {
-  observer(aceStacks, drawStack, playerStacks);
+  observer(aceStacks, drawStack, discardStack, playerStacks);
 }
 
 export function observe(o) {
@@ -82,16 +83,42 @@ function removeCard(card) {
   } else if (id.includes('ace')) {
     id = parseInt(id.slice(3));
     removeAce(id);
+  } else if (id.includes('discard')) {
+    discardStack = discardStack.slice(0, discardStack.length - 1);
   } else {
     drawStack = drawStack.slice(1);
   }
 }
 
-export function flipCard(stack) {
-  if (stack === 'draw') {
-    drawStack[0].faceUp = true;
+function checkForFlipDraw() {
+  if (drawStack.length == 0 && discardStack.length > 0) {
+    for (let dcard of discardStack) {
+      dcard.faceUp = false;
+    }
+    drawStack = discardStack;
+    discardStack = [];
     emitChange();
   }
+}
+
+export function flipCard(stack) {
+  if (stack === 'draw') {
+    if (drawStack.length > 0) {
+      drawStack[0].faceUp = true;
+      emitChange();
+    }
+  }
+}
+
+export function canMoveCardToDiscard(card) {
+  return card.parent === 'draw';
+}
+
+export function moveCardToDiscard(card) {
+  discardStack.push(card);
+  removeCard(card);
+  checkForFlipDraw();
+  emitChange();
 }
 
 export function canMoveCardToAce(card, suit, value) {
@@ -105,6 +132,7 @@ export function moveCardToAce(card, id) {
   aceStacks[id].display = card.display;
   aceStacks[id].faceUp = true;
   removeCard(card);
+  checkForFlipDraw();
   emitChange();
 }
 
@@ -149,6 +177,7 @@ export function moveCardToPlayer(card, id) {
   if (playerStacks[id][0].value == 14) {
     playerStacks[id] = playerStacks[id].slice(1);
   }
+  checkForFlipDraw();
   emitChange();
 }
 

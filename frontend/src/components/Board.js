@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AceStack from '../containers/AceStack';
 import DrawStack from '../containers/DrawStack';
 import PlayerStack from '../containers/PlayerStack';
+import DiscardStack from '../containers/DiscardStack';
 import Card from './Card';
 import { canMoveCardToPlayer, moveCardToPlayer, canMoveCardToAce, moveCardToAce } from '../api/Game';
 import { DragDropContext } from 'react-dnd';
@@ -14,6 +15,9 @@ class Board extends Component {
             PropTypes.object.isRequired
         ).isRequired,
         drawStack: PropTypes.arrayOf(
+            PropTypes.object.isRequired
+        ).isRequired,
+        discardStack: PropTypes.arrayOf(
             PropTypes.object.isRequired
         ).isRequired,
         playerStacks: PropTypes.arrayOf(
@@ -45,6 +49,21 @@ class Board extends Component {
         }
     }
 
+    renderDiscardStack(stack) {
+        if (stack.length > 0) {
+            const len = stack.length - 1;
+            return (
+                <DiscardStack>
+                    {this.renderCard(stack[len].suit, stack[len].value, stack[len].display, stack[len].faceUp)}
+                </DiscardStack>
+            );
+        } else {
+            return (
+                <DiscardStack></DiscardStack>
+            )
+        }
+    }
+
     renderPlayerStack(i, stack) {
         const lastCard = stack[stack.length - 1];
         let cards = stack.map((card, index) => this.renderCard(card.suit, card.value, card.display, card.faceUp, index));
@@ -65,6 +84,7 @@ class Board extends Component {
         const aceStacks = [];
         const playerStacks = [];
         const drawPile = this.renderDrawStack(this.props.drawStack);
+        const discardPile = this.renderDiscardStack(this.props.discardStack);
         for (let i = 0; i < 4; i++) {
             aceStacks.push(this.renderAceStack(i, this.props.aceStacks[i]));
         }
@@ -81,6 +101,7 @@ class Board extends Component {
                     flexWrap: 'wrap',
                 }}>
                 {drawPile}
+                {discardPile}
                 {aceStacks}
                 </div>
                 <div style={{
