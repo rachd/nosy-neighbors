@@ -15,13 +15,22 @@ let playerStacks = [
 ];
 let observer = null;
 
-function setUpGame() {
-  drawStack = shuffle(DECK);
-};
-
 function emitChange() {
   observer(aceStacks, drawStack, discardStack, playerStacks);
 }
+
+export function setUpGame() {
+  drawStack = shuffle(DECK);
+  for (let i = 0; i < 4; i++) {
+    playerStacks[i] = [];
+    for (let j = 0; j < i+1; j++) {
+      playerStacks[i].push(drawStack[0]);
+      drawStack = drawStack.slice(1);
+    }
+    playerStacks[i][playerStacks[i].length-1].faceUp = true;
+  }
+  emitChange();
+};
 
 export function observe(o) {
   if (observer) {
@@ -180,9 +189,3 @@ export function moveCardToPlayer(card, id) {
   checkForFlipDraw();
   emitChange();
 }
-
-
-
-
-//Actual Gameplay
-setUpGame();

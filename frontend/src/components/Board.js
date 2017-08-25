@@ -5,7 +5,7 @@ import DrawStack from '../containers/DrawStack';
 import PlayerStack from '../containers/PlayerStack';
 import DiscardStack from '../containers/DiscardStack';
 import Card from './Card';
-import { canMoveCardToPlayer, moveCardToPlayer, canMoveCardToAce, moveCardToAce } from '../api/Game';
+import { setUpGame, canMoveCardToPlayer, moveCardToPlayer, canMoveCardToAce, moveCardToAce } from '../api/Game';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
@@ -78,6 +78,10 @@ class Board extends Component {
         if (suit != '') {
             return <Card key={key} id={suit+value} value={value} suit={suit} display={display} faceUp={faceUp}/>;
         }
+    }
+
+    componentDidMount() {
+        setUpGame();
     }
 
     render() {
