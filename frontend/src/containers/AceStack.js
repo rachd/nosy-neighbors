@@ -8,7 +8,7 @@ import { DropTarget } from 'react-dnd';
 const stackTarget = {
   drop(props, monitor) {
     let card = monitor.getItem();
-    moveCardToAce(card, props.suit, props.value, props.id);
+    moveCardToAce(card, props.id);
   },
   canDrop(props, monitor) {
     let card = monitor.getItem();

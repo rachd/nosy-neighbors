@@ -6,7 +6,14 @@ import { DragSource } from 'react-dnd';
 const cardSource = {
   beginDrag(props) {
     const parentId = document.getElementById(props.id).parentElement.id;
-    return {id: props.id, suit: props.suit, value: props.value, display: props.display, parent: parentId};
+    return {id: props.id, suit: props.suit, value: props.value, display: props.display, faceUp: true, parent: parentId};
+  },
+  canDrag(props) {
+      if (props.faceUp) {
+          return true;
+      } else {
+          return false;
+      }
   }
 };
 
@@ -20,15 +27,16 @@ function collect(connect, monitor) {
 
 class Card extends Component {
   render() {
-        const { connectDragSource, isDragging, id, suit, value, display } = this.props;
+        const { connectDragSource, isDragging, id, suit, value, display, faceUp } = this.props;
+        let content = this.props.faceUp ? this.props.display + ' of ' + this.props.suit : 'face down';
         return connectDragSource(
             <div style={{
                 opacity: isDragging ? 0.5 : 1,
                 width: '150px',
                 height: '200px',
-                cursor: 'move',
+                cursor: faceUp ? 'move' : 'default',
                 border: '1px solid black'
-            }} id={id}>{this.props.display} of {this.props.suit}</div>
+            }} id={id}>{content}</div>
         );
   }
 }
@@ -38,6 +46,7 @@ Card.propTypes = {
     suit: PropTypes.string.isRequired,
     value: PropTypes.number.isRequired,
     display: PropTypes.string.isRequired,
+    faceUp: PropTypes.bool.isRequired,
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired
 };

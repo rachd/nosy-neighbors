@@ -26,7 +26,7 @@ class Board extends Component {
     renderAceStack(i, stack) {
         return (
             <AceStack key={i} id={i} suit={stack.suit} value={stack.value}>
-                {this.renderCard(stack.suit, stack.value, stack.display)}
+                {this.renderCard(stack.suit, stack.value, stack.display, true)}
             </AceStack>
         );
     }
@@ -35,7 +35,7 @@ class Board extends Component {
         if (stack.length > 0) {
             return (
                 <DrawStack>
-                    {this.renderCard(stack[0].suit, stack[0].value, stack[0].display)}
+                    {this.renderCard(stack[0].suit, stack[0].value, stack[0].display, stack[0].faceUp)}
                 </DrawStack>
             );
         } else {
@@ -47,7 +47,7 @@ class Board extends Component {
 
     renderPlayerStack(i, stack) {
         const lastCard = stack[stack.length - 1];
-        let cards = stack.map((card, index) => this.renderCard(card.suit, card.value, card.display, index));
+        let cards = stack.map((card, index) => this.renderCard(card.suit, card.value, card.display, card.faceUp, index));
         return (
             <PlayerStack key={i} id={i} value={lastCard.value} suit={lastCard.suit}>
                 {cards[0] ? cards : null}
@@ -55,9 +55,9 @@ class Board extends Component {
         )
     }
 
-    renderCard(suit, value, display, key=0) {
+    renderCard(suit, value, display, faceUp, key=0) {
         if (suit != '') {
-            return <Card key={key} id={suit+value} value={value} suit={suit} display={display}/>;
+            return <Card key={key} id={suit+value} value={value} suit={suit} display={display} faceUp={faceUp}/>;
         }
     }
 

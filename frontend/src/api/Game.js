@@ -1,25 +1,22 @@
+import {DECK} from '../constants/Deck';
+
 let aceStacks = [
-  {suit: '', value: 0, display: ''}, 
-  {suit: '', value: 0, display: ''},
-  {suit: '', value: 0, display: ''},
-  {suit: '', value: 0, display: ''}];
-let drawStack = [
-  // {suit: 'spades', value: 1, display: 'ace'},
-  // {suit: 'clubs', value: 1, display: 'ace'},
-  // {suit: 'spades', value: 2, display: 'two'},
-  {suit: 'hearts', value: 13, display: 'king'},
-  {suit: 'spades', value: 12, display: 'queen'},
-  {suit: 'diamonds', value: 13, display: 'king'},
-  {suit: 'hearts', value: 11, display: 'jack'},
-  {suit: 'clubs', value: 12, display: 'queen'}
-];
+  {suit: '', value: 0, display: '', faceUp: true}, 
+  {suit: '', value: 0, display: '', faceUp: true},
+  {suit: '', value: 0, display: '', faceUp: true},
+  {suit: '', value: 0, display: '', faceUp: true}];
+let drawStack = DECK;
 let playerStacks = [
-  [{suit: '', value: 14, display: ''}], 
-  [{suit: '', value: 14, display: ''}], 
-  [{suit: '', value: 14, display: ''}], 
-  [{suit: '', value: 14, display: ''}]
+  [{suit: '', value: 14, display: '', faceUp: true}], 
+  [{suit: '', value: 14, display: '', faceUp: true}], 
+  [{suit: '', value: 14, display: '', faceUp: true}], 
+  [{suit: '', value: 14, display: '', faceUp: true}]
 ];
 let observer = null;
+
+function setUpGame() {
+  drawStack = shuffle(DECK);
+};
 
 function emitChange() {
   observer(aceStacks, drawStack, playerStacks);
@@ -32,6 +29,25 @@ export function observe(o) {
 
   observer = o;
   emitChange();
+}
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
 
 function removeAce(id) {
@@ -47,7 +63,7 @@ function removeAce(id) {
 
 function removePlayerCard(id, card) {
   if(card.value == 13) {
-    playerStacks[id] = [{suit: '', value: 14, display: ''}];
+    playerStacks[id] = [{suit: '', value: 14, display: '', faceUp: true}];
   } else {
     for (let [index, pCard] of playerStacks[id].entries()) {
       if (pCard.id === card.id) {
@@ -71,15 +87,23 @@ function removeCard(card) {
   }
 }
 
+export function flipCard(stack) {
+  if (stack === 'draw') {
+    drawStack[0].faceUp = true;
+    emitChange();
+  }
+}
+
 export function canMoveCardToAce(card, suit, value) {
   const stackSuit = suit ? suit : card.suit;
   return (card.suit === stackSuit && card.value == value + 1);
 }
 
-export function moveCardToAce(card, suit, value, id) {
+export function moveCardToAce(card, id) {
   aceStacks[id].suit = card.suit;
   aceStacks[id].value = card.value;
   aceStacks[id].display = card.display;
+  aceStacks[id].faceUp = true;
   removeCard(card);
   emitChange();
 }
@@ -116,7 +140,7 @@ export function moveCardToPlayer(card, id) {
       }
       playerStacks[card.parent.slice(-1)] = parentStack.slice(0, cardIndex);
       if(!playerStacks[card.parent.slice(-1)][0]) {
-        playerStacks[card.parent.slice(-1)] = [{suit: '', value: 14, display: ''}];
+        playerStacks[card.parent.slice(-1)] = [{suit: '', value: 14, display: '', faceUp: true}];
       }
   } else {
     playerStacks[id].push(card);
@@ -127,3 +151,9 @@ export function moveCardToPlayer(card, id) {
   }
   emitChange();
 }
+
+
+
+
+//Actual Gameplay
+setUpGame();
