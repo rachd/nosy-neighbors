@@ -27,7 +27,7 @@ function collect(connect, monitor) {
 
 class Card extends Component {
   render() {
-        const { connectDragSource, isDragging, id, suit, value, display, faceUp } = this.props;
+        const { connectDragSource, isDragging, id, suit, value, display, faceUp, top } = this.props;
         let content = this.props.faceUp ? this.props.display + ' of ' + this.props.suit : 'face down';
         return connectDragSource(
             <div style={{
@@ -35,7 +35,10 @@ class Card extends Component {
                 width: '150px',
                 height: '200px',
                 cursor: faceUp ? 'move' : 'default',
-                border: '1px solid black'
+                border: '1px solid black',
+                background: 'wheat',
+                position: 'absolute',
+                top: top
             }} id={id}>{content}</div>
         );
   }
@@ -47,6 +50,7 @@ Card.propTypes = {
     value: PropTypes.number.isRequired,
     display: PropTypes.string.isRequired,
     faceUp: PropTypes.bool.isRequired,
+    top: PropTypes.number.isRequired,
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired
 };

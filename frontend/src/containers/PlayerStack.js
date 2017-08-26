@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Stack from '../components/Stack';
-import { canMoveCardToPlayer, moveCardToPlayer } from '../api/Game';
+import { flipCard, canMoveCardToPlayer, moveCardToPlayer } from '../api/Game';
 import { ItemTypes } from '../constants/Types';
 import { DropTarget } from 'react-dnd';
 
@@ -25,6 +25,10 @@ function collect(connect, monitor) {
 }
 
 class PlayerStack extends Component {
+    handleClick() {
+        flipCard("player" + this.props.id);
+    }
+
     render() {
         const { id, suit, value, connectDropTarget, isOver, canDrop } = this.props;
         let backgroundColor = "transparent";
@@ -34,7 +38,7 @@ class PlayerStack extends Component {
             backgroundColor = "green";
         }
         return connectDropTarget(
-            <div style={{backgroundColor: backgroundColor}} className="playerStack">
+            <div style={{backgroundColor: backgroundColor}} className="playerStack" onClick={this.handleClick.bind(this)}>
                 <Stack id={'player' + id}>
                 {this.props.children}
                 </Stack>

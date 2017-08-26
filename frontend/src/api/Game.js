@@ -72,7 +72,7 @@ function removeAce(id) {
 }
 
 function removePlayerCard(id, card) {
-  if(card.value == 13) {
+  if(playerStacks[id].length == 1) {
     playerStacks[id] = [{suit: '', value: 14, display: '', faceUp: true}];
   } else {
     for (let [index, pCard] of playerStacks[id].entries()) {
@@ -110,10 +110,28 @@ function checkForFlipDraw() {
   }
 }
 
+function checkForWin() {
+  let win = true;
+  for (let astack of aceStacks) {
+    if (astack.value != 1) {
+      return false;
+    }
+  }
+  alert('You win!');
+  return true;
+}
+
 export function flipCard(stack) {
   if (stack === 'draw') {
     if (drawStack.length > 0) {
       drawStack[0].faceUp = true;
+      emitChange();
+    }
+  }
+  if (stack.includes('player')) {
+    const id = stack.slice(6);
+    if(!playerStacks[id][playerStacks[id].length - 1].faceUp){
+      playerStacks[id][playerStacks[id].length - 1].faceUp = true;
       emitChange();
     }
   }

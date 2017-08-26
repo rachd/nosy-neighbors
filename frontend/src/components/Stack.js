@@ -10,7 +10,8 @@ export default class Stack extends Component {
             border: border,
             width: '150px',
             height: '200px',
-            margin: '10px'
+            margin: '10px',
+            position: 'relative'
         }} id={this.props.id}>
             {this.props.children}
         </div>);
