@@ -159,6 +159,7 @@ export function moveCardToAce(card, id) {
   aceStacks[id].display = card.display;
   aceStacks[id].faceUp = true;
   removeCard(card);
+  checkForWin();
   checkForFlipDraw();
   emitChange();
 }
