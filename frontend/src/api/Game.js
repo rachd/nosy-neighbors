@@ -1,4 +1,5 @@
-import {DECK} from '../constants/Deck';
+import axios from 'axios';
+import {DECK} from "../constants/Deck";
 
 let aceStacks = [
   {suit: '', value: 0, display: '', faceUp: true}, 
@@ -17,6 +18,12 @@ let observer = null;
 
 function emitChange() {
   observer(aceStacks, drawStack, discardStack, playerStacks);
+}
+
+function getDeck() {
+  axios.get("http://localhost:8000/api/deck").then(res => {
+    return res.data.draw;
+  });
 }
 
 export function setUpGame() {
