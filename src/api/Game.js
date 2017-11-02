@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {DECK} from "../constants/Deck";
+import fire from '../fire';
 
 let aceStacks = [
   {suit: '', value: 0, display: '', faceUp: true}, 
@@ -15,6 +16,15 @@ let playerStacks = [
   [{suit: '', value: 14, display: '', faceUp: true}]
 ];
 let observer = null;
+
+function pushChanges() {
+  fire.database().ref('game').set({
+    'aces': aceStacks,
+    'draw': drawStack,
+    'discard': discardStack,
+    'players': playerStacks
+  });
+}
 
 function emitChange() {
   observer(aceStacks, drawStack, discardStack, playerStacks);
@@ -36,6 +46,49 @@ export function setUpGame() {
     }
     playerStacks[i][playerStacks[i].length-1].faceUp = true;
   }
+  // console.log(playerStacks);
+  console.log(aceStacks);
+  // console.log(discardStack);
+  // console.log(drawStack);
+  // fire.database().ref('aces').set( aceStacks );
+  // fire.database().ref('draw').set(drawStack);
+  // fire.database().ref('discard').set(discardStack);
+  // fire.database().ref('players').set(playerStacks);
+  fire.database().ref('game').set({
+    'aces': aceStacks,
+    'draw': drawStack,
+    'discard': discardStack,
+    'players': playerStacks
+  });
+  const acesRef = fire.database().ref('game').limitToLast(1);
+  acesRef.on('value', function(snapshot) {
+    const val = snapshot.val();
+    if(val.discard) {
+      discardStack = val.discard;
+      emitChange();
+    }
+    // aceStacks = snapshot.val();
+    // emitChange();
+    console.log(snapshot.val());
+  });
+
+  // const drawRef = fire.database().ref('draw').limitToLast(1);
+  // drawRef.on('value', function(snapshot) {
+  //   drawStack = snapshot.val();
+  //   emitChange();
+  // });
+
+  // const discardRef = fire.database().ref('discard').limitToLast(1);
+  // discardRef.on('value', function(snapshot) {
+  //   discardStack = snapshot.val();
+  //   emitChange();
+  // });
+
+  // const playerRef = fire.database().ref('players').limitToLast(1);
+  // playerRef.on('value', function(snapshot) {
+  //   playerStacks = snapshot.val();
+  //   emitChange();
+  // });
   emitChange();
 };
 
@@ -132,6 +185,7 @@ export function flipCard(stack) {
   if (stack === 'draw') {
     if (drawStack.length > 0) {
       drawStack[0].faceUp = true;
+      pushChanges();
       emitChange();
     }
   }
@@ -139,6 +193,7 @@ export function flipCard(stack) {
     const id = stack.slice(6);
     if(!playerStacks[id][playerStacks[id].length - 1].faceUp){
       playerStacks[id][playerStacks[id].length - 1].faceUp = true;
+      pushChanges();
       emitChange();
     }
   }
@@ -152,6 +207,7 @@ export function moveCardToDiscard(card) {
   discardStack.push(card);
   removeCard(card);
   checkForFlipDraw();
+  pushChanges();
   emitChange();
 }
 
@@ -168,6 +224,7 @@ export function moveCardToAce(card, id) {
   removeCard(card);
   checkForWin();
   checkForFlipDraw();
+  pushChanges();
   emitChange();
 }
 
@@ -213,5 +270,6 @@ export function moveCardToPlayer(card, id) {
     playerStacks[id] = playerStacks[id].slice(1);
   }
   checkForFlipDraw();
+  pushChanges();
   emitChange();
 }
