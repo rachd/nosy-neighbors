@@ -19,5 +19,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://rachd.github.io/nosy-neighbors/"
+  "homepage": "https://nosy-neighbors-game.firebaseapp.com/"
 }
