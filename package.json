@@ -1,21 +1,24 @@
 {
-  "name": "nosy-neighbors",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "engines": {
-    "node": "6.2.0"
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.16.2",
+    "firebase": "^4.6.0",
+    "gh-pages": "^1.0.0",
+    "react": "^15.6.1",
+    "react-dnd": "^2.4.0",
+    "react-dnd-html5-backend": "^2.4.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.11"
   },
   "scripts": {
-    "start": "node server.js",
-    "deploy": "git push & git push heroku master"
+    "predeploy": "npm run build",
+    "deploy": "npm run build && firebase deploy",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "4.15.4",
-    "firebase-admin": "^5.2.1",
-    "socket.io": "2.0.3"
-  }
+  "homepage": "https://nosy-neighbors-game.firebaseapp.com/"
 }
