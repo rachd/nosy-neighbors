@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Board from './components/Board';
 import { observe } from './api/Game';
+import fire from './fire';
 
 const rootEl = document.getElementById('root');
 
