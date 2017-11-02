@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {DECK} from "../constants/Deck";
+import fire from '../fire';
 
 let aceStacks = [
   {suit: '', value: 0, display: '', faceUp: true}, 
@@ -16,13 +17,30 @@ let playerStacks = [
 ];
 let observer = null;
 
-function emitChange() {
+const gameRef = fire.database().ref('game');
+gameRef.on('value', function(snapshot) {
+  const val = snapshot.val();
+  if(val.players) {
+    playerStacks = val.players;
+  }
+  if(val.draw) {
+    drawStack = val.draw;
+  }
+  if(val.discard) {
+    discardStack = val.discard;
+  }
+  if(val.aces) {
+    aceStacks = val.aces;
+  }
   observer(aceStacks, drawStack, discardStack, playerStacks);
-}
+});
 
-function getDeck() {
-  axios.get("http://localhost:8000/api/deck").then(res => {
-    return res.data.draw;
+function emitChange() {
+  fire.database().ref('game').set({
+    aces: aceStacks,
+    discard: discardStack,
+    draw: drawStack,
+    players: playerStacks
   });
 }
 
